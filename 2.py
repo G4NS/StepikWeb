@@ -1,15 +1,16 @@
 import asyncio
 
 async def main():
-
-    import socket
     print("===START===")
+    import socket
+    global socket
 
     socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
     socket.bind(('0.0.0.0', 2222))
     socket.listen(10)
+    main_loop.create_task(while_func())
 
+async def while_func():
     while True:
         connect, addr = socket.accept()
         while True:
@@ -21,4 +22,6 @@ async def main():
             connect.send(data)
             connect.close()
 
-asyncio.run(main())
+main_loop = asyncio.new_event_loop()
+main_loop.run_until_complete(main())
+main_loop.run_forever()
